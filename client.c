@@ -7,10 +7,16 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
+#include <stdlib.h>
+
+#define BUFF_SIZE 1024
 
 int main()
 {
 	struct sockaddr_in s;
+	bool terminate = false;
+	char buf[BUFF_SIZE];
+
 	bzero((char*)&s, sizeof(s));
 
 	s.sin_family = AF_INET;
@@ -30,5 +36,14 @@ int main()
 		exit(1);
 	}
 
+	while(!terminate)
+	{
+		read(0, buf, sizeof(buf));
+		if(!strcmp(buf, "Q"))
+		{
+			terminate = true;
+		}
+		write(fd, buf, sizeof(buf));
+	}
 
 }
